@@ -1,14 +1,31 @@
-# ใช้ Go version 1.23.1
-FROM golang:1.23.1-alpine
+# Use the official Golang image
+FROM golang:1.23.1 AS build
 
-WORKDIR /app  
+# Set the Current Working Directory inside the container
+WORKDIR /app
 
-COPY ./backend/go.mod ./backend/go.sum ./  
+# Copy go mod and sum files
+COPY backend/go.mod backend/go.sum ./
 
-RUN go mod download  
+# Download dependencies
+RUN go mod download
 
-COPY ./backend /app  
+# Copy the source code into the container
+COPY backend/ .
 
+# Build the Go app
 RUN go build -o main .
 
-CMD ["/app/main"]
+# Use a smaller base image to run the app
+FROM alpine:latest
+
+WORKDIR /root/
+
+# Copy the pre-built binary file from the previous stage
+COPY --from=build /app/main .
+
+# Expose port 7777 to the outside world
+EXPOSE 7777
+
+# Command to run the executable
+CMD ["./main"]

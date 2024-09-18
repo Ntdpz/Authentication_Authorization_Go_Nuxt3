@@ -9,6 +9,8 @@ services:
       MYSQL_DATABASE: auth_db
     ports:
       - '3306:3306'
+    volumes:
+      - db_data:/var/lib/mysql
 
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
@@ -18,18 +20,5 @@ services:
     environment:
       PMA_HOST: db
 
-  go-api:
-    build:
-      context: .
-      dockerfile: ./backend/Dockerfile
-    restart: always
-    ports:
-      - '7777:7777'
-    depends_on:
-      - db
-    environment:
-      DB_HOST: db
-      DB_PORT: 3306
-      DB_USER: root
-      DB_PASSWORD: root
-      DB_NAME: auth_db
+volumes:
+  db_data:

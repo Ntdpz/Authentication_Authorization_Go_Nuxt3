@@ -1,0 +1,48 @@
+Authentication_Authorization_Go_Nuxt3/
+├── backend/
+│   ├── Dockerfile
+│   ├── go.mod
+│   ├── go.sum
+│   ├── main.go
+│   ├── config/
+│   │   └── config.go
+│   ├── controllers/
+│   │   └── authController.go
+│   ├── middleware/
+│   │   └── cors.go
+│   ├── models/
+│   │   └── user.go
+│   ├── routes/
+│   │   └── routes.go
+│   └── utils/
+│       └── jwt.go
+├── Database.txt
+├── docker-compose.yaml
+├── index.html
+└── login.html
+
+
+
+
+Authentication_Authorization_Go_Nuxt3/
+├── backend/ #โฟลเดอร์หลักสำหรับโค้ดของโครงการ Go
+│   ├── Dockerfile #ไฟล์สำหรับการสร้าง Docker image สำหรับแอปพลิเคชัน Go ของคุณ
+│   ├── go.mod #ไฟล์ที่ใช้ในการจัดการการพึ่งพาของ Go modules
+│   ├── go.sum #ไฟล์ที่ใช้สำหรับการตรวจสอบความถูกต้องของ Go modules
+│   ├── main.go #จุดเริ่มต้นของโปรแกรม Go
+│   ├── config/ #โฟลเดอร์สำหรับไฟล์การตั้งค่า
+│   │   └── config.go #ไฟล์ที่ใช้สำหรับการตั้งค่าเชื่อมต่อฐานข้อมูล
+│   ├── controllers/ #โฟลเดอร์สำหรับไฟล์ที่จัดการการควบคุมต่างๆ
+│   │   └── authController.go #ไฟล์ที่จัดการการลงทะเบียนและการเข้าสู่ระบบ
+│   ├── middleware/ # โฟลเดอร์สำหรับไฟล์ที่จัดการ middleware
+│   │   └── cors.go #ไฟล์ที่จัดการ CORS middleware
+│   ├── models/ #โฟลเดอร์สำหรับไฟล์ที่เก็บโครงสร้างข้อมูลหรือโมเดล
+│   │   └── user.go #ไฟล์ที่จัดการข้อมูลผู้ใช้และ JWT claims
+│   ├── routes/ #โฟลเดอร์สำหรับไฟล์ที่จัดการเส้นทาง API
+│   │   └── routes.go #ไฟล์ที่ตั้งค่าเส้นทางสำหรับ API
+│   └── utils/ #โฟลเดอร์สำหรับไฟล์ที่มีฟังก์ชันที่ใช้ซ้ำได้
+│       └── jwt.go #ไฟล์ที่จัดการ JWT utilities
+├── Database.txt
+├── docker-compose.yaml
+├── index.html
+└── login.html
