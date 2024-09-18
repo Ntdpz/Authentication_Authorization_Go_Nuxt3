@@ -17,6 +17,7 @@ var jwtKey = []byte("your_secret_key")
 
 type Credentials struct {
 	Username string `json:"username"`
+	Email    string `json:"email"`
 	Password string `json:"password"`
 }
 
@@ -36,8 +37,43 @@ func main() {
 	}
 	defer db.Close()
 
+	// API สำหรับการลงทะเบียนผู้ใช้ใหม่
+	http.HandleFunc("/register", func(w http.ResponseWriter, r *http.Request) {
+		if r.Method != http.MethodPost {
+			http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
+			return
+		}
+
+		var creds Credentials
+		err := json.NewDecoder(r.Body).Decode(&creds)
+		if err != nil {
+			http.Error(w, "Invalid request", http.StatusBadRequest)
+			log.Printf("Error decoding request body: %v", err)
+			return
+		}
+
+		// Hash รหัสผ่าน
+		hashedPassword, err := bcrypt.GenerateFromPassword([]byte(creds.Password), bcrypt.DefaultCost)
+		if err != nil {
+			http.Error(w, "Internal server error", http.StatusInternalServerError)
+			log.Printf("Error hashing password: %v", err)
+			return
+		}
+
+		// เพิ่มผู้ใช้ใหม่ในฐานข้อมูล
+		_, err = db.Exec("INSERT INTO users (username, email, password) VALUES (?, ?, ?)", creds.Username, creds.Email, string(hashedPassword))
+		if err != nil {
+			http.Error(w, "Internal server error", http.StatusInternalServerError)
+			log.Printf("Error inserting new user: %v", err)
+			return
+		}
+
+		w.WriteHeader(http.StatusCreated)
+		w.Write([]byte("User registered successfully"))
+	})
+
+	// API สำหรับการเข้าสู่ระบบ
 	http.HandleFunc("/login", func(w http.ResponseWriter, r *http.Request) {
-		// ตรวจสอบว่าเป็น POST method
 		if r.Method != http.MethodPost {
 			http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
 			return
