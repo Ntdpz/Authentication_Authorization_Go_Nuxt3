@@ -10,6 +10,7 @@ import (
 
 	"github.com/dgrijalva/jwt-go"
 	_ "github.com/go-sql-driver/mysql"
+	"github.com/rs/cors"
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -37,8 +38,10 @@ func main() {
 	}
 	defer db.Close()
 
+	mux := http.NewServeMux()
+
 	// API สำหรับการลงทะเบียนผู้ใช้ใหม่
-	http.HandleFunc("/register", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("/register", func(w http.ResponseWriter, r *http.Request) {
 		if r.Method != http.MethodPost {
 			http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
 			return
@@ -73,7 +76,7 @@ func main() {
 	})
 
 	// API สำหรับการเข้าสู่ระบบ
-	http.HandleFunc("/login", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("/login", func(w http.ResponseWriter, r *http.Request) {
 		if r.Method != http.MethodPost {
 			http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
 			return
@@ -143,6 +146,23 @@ func main() {
 		}
 	})
 
+	// API สำหรับการออกจากระบบ (ไม่จำเป็นต้องใช้ในกรณีนี้)
+	mux.HandleFunc("/logout", func(w http.ResponseWriter, r *http.Request) {
+		w.WriteHeader(http.StatusOK)
+		w.Write([]byte("Logged out successfully"))
+	})
+
+	// สร้าง CORS middleware
+	corsHandler := cors.New(cors.Options{
+		AllowedOrigins:   []string{"http://localhost:5500"}, // อนุญาตให้เข้าถึงจากโดเมนนี้
+		AllowCredentials: true,
+		AllowedMethods:   []string{"GET", "POST", "PUT", "DELETE"},
+		AllowedHeaders:   []string{"Content-Type", "Authorization"},
+	})
+
+	// ใช้งาน CORS middleware
+	server := corsHandler.Handler(mux)
+
 	fmt.Println("Server is running on port 7777")
-	log.Fatal(http.ListenAndServe(":7777", nil))
+	log.Fatal(http.ListenAndServe(":7777", server))
 }

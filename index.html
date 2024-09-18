@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome</title>
+</head>
+
+<body>
+    <h2>Welcome</h2>
+    <div id="userInfo">
+        <p id="username"></p>
+        <p id="email"></p>
+        <p id="role"></p>
+        <p id="token"></p>
+    </div>
+    <button id="logoutButton">Logout</button>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const token = localStorage.getItem('token');
+            const username = localStorage.getItem('username');
+            const email = localStorage.getItem('email');
+            const role = localStorage.getItem('role');
+
+            if (!token || !username || !email || !role) {
+                // หากไม่มี token หรือข้อมูลผู้ใช้ให้เปลี่ยนเส้นทางไปยัง login.html
+                window.location.href = 'login.html';
+                return;
+            }
+
+            // แสดงข้อมูลผู้ใช้
+            document.getElementById('username').textContent = `Username: ${username}`;
+            document.getElementById('email').textContent = `Email: ${email}`;
+            document.getElementById('role').textContent = `Role: ${role}`;
+            document.getElementById('token').textContent = `Token: ${token}`;
+
+            // การจัดการปุ่ม Logout
+            document.getElementById('logoutButton').addEventListener('click', function () {
+                localStorage.removeItem('token');
+                localStorage.removeItem('username');
+                localStorage.removeItem('email');
+                localStorage.removeItem('role');
+                window.location.href = 'login.html'; // เปลี่ยนเส้นทางไปยังหน้า login
+            });
+        });
+    </script>
+</body>
+
+</html>
